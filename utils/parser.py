@@ -1,19 +1,32 @@
 from bs4 import BeautifulSoup
 
-def parser(html_text):
 
-    soup = BeautifulSoup(html_text , "html.parser")
+class Parser:
 
-    results = soup.select("article.result")
-    result_list_items = soup.select("li.js-db-result-item")
+    def parse(self , html : str) -> list[dict]:
 
-    print(f"Articles found : {len(results)}")
-    print(f"Result list items found : {len(result_list_items)}")
+        soup = BeautifulSoup(html , "html.parser") 
+        articles = soup.select("article.result")
 
-    print("\n")
+        programs = []
 
-    for index , result_item in enumerate(result_list_items , start = 1):
+        for article in articles:
 
-        articles = result_item.select("article.result")
-        print(f"List item {index} : "
-              f"Articles found : {len(articles)} article (s)")
+            headings = article.select("h3 .result__headline-content")
+
+            institution = (headings[0].get_text(" " , strip = True) if len(headings) > 0 else None )
+            program_name = (headings[1].get_text(" " , strip = True) if len(headings) > 1 else None)
+
+            program = {
+                       "id" : article.get("id") ,
+                       "Institution" : institution,
+                       "Program name" : program_name, 
+                       }
+
+            programs.append(program)
+
+        return programs
+
+           
+            
+            

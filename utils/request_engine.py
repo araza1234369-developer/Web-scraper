@@ -2,7 +2,7 @@ import requests
 
 class RequestEngine():
 
-    def __init__(self , timeout : int = 0.5):
+    def __init__(self , timeout : int = 10):
         self.__session = requests.Session()
         self.__timeout = timeout
 

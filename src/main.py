@@ -1,13 +1,16 @@
 from utils.request_engine import RequestEngine
-from utils.response_handler import response_validator
-from utils.parser import parser
+from utils.response_handler import ResponseHandler
+from utils.parser import Parser
 import requests
 
 def main():
 
+
     url = "https://www.daad.de/en/studying-in-germany/universities/all-degree-programmes/"
 
     request_engine = RequestEngine()
+    response_handler = ResponseHandler()
+    parser = Parser()
 
     try:
         response = request_engine.make_request(url)
@@ -22,13 +25,22 @@ def main():
         request_engine.close()
 
 
-    valid_html = response_validator(response)
+    validated_response = response_handler.response_validator(response)
 
-    if valid_html is not None:
-        print(f"Html structure recieved successfully.")
+    if not isinstance(validated_response , requests.Response):
+        print(f"Error : {validated_response}")
+        return
 
-    else:
-        print(f"Html structure is not valid.")
+    print(f"Html structure successfully recieved.")
+    print("\n")
+
+    parsed_data = parser.parse(validated_response.text)
+
+    for data in parsed_data:
+
+        print(data)
+
+
 
 
 
