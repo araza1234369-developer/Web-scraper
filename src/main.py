@@ -10,7 +10,7 @@ def main():
 
     request_engine = RequestEngine()
     response_handler = ResponseHandler()
-    parser = Parser()
+    parser = Parser(url)
 
     try:
         response = request_engine.make_request(url)
@@ -20,6 +20,7 @@ def main():
             return
 
         print(f"Request successfull...")
+        print(f"Request status : {response}")
 
     finally:
         request_engine.close()
@@ -39,9 +40,6 @@ def main():
     for data in parsed_data:
 
         print(data)
-
-
-
 
 
 if __name__ == "__main__":
