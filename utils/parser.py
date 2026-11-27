@@ -24,33 +24,31 @@ class Parser:
             link = article.select_one("a.result__link")
             href = link.get("href") if link else None
             detail_url = urljoin(self.base_url , href) if href else None
-
-            details = {}
-            detail_items = article.select("dl .js-show-more-item")
+            
+            detail_items = article.select(".js-show-more-list")
 
             for item in detail_items:
-                
-                term = item.select_one("dt")
-                if term is None:
-                    continue
 
-                label = term.get_text(" " , strip = True).rstrip(":").strip()
-                definitions = item.select("dd")
+                label = item.select("dd")
+                degree = label[0].get_text(" " , strip = True)
+                period_of_study = label[1].get_text(" " , strip = True)
+                location = label[2].get_text(" " , strip = True)
+                study_mode = label[3].get_text(" " , strip = True)
+                deadlines = label[4].get_text(" " , strip = True)
 
-                values = [definition.get_text(" " , strip = True) 
-                          for definition in definitions 
-                          if definition.get_text(" " , strip = True)]
-
-                if label and values:
-                    details[label] = values[0] if len(values) == 1 else values
-
-
+        
             program = {
+
                        "id" : article.get("id") ,
                        "Institution" : institution,
                        "Program name" : program_name,
                        "Detail URL" : detail_url,
-                       "Details" : details 
+                       "Degree" : degree,
+                       "Period of study" : period_of_study,
+                       "Location" : location,
+                       "study_mode" : study_mode,
+                       "deadlines" : deadlines
+                      
                        }
 
             programs.append(program)

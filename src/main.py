@@ -20,7 +20,7 @@ def main():
             return
 
         print(f"Request successfull...")
-        print(f"Request status : {response}")
+        print(f"Request status : {response.status_code}")
 
     finally:
         request_engine.close()
@@ -40,6 +40,7 @@ def main():
     for data in parsed_data:
 
         print(data)
+        print("\n")
 
 
 if __name__ == "__main__":
